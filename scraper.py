@@ -20,8 +20,14 @@ if __name__ == '__main__':
     from selenium.webdriver.support import expected_conditions as EC
     import psycopg2
 
+    file = open("credentials.txt", "r")
+
+    db = file.readline()
+    user = file.readline()
+    password = file.readline()
+
     print('Connecting to the PostgreSQL database...')
-    conn = psycopg2.connect("dbname=hbwatcher user=hbpython password=hbPython")
+    conn = psycopg2.connect(dbname=db, user=user, password=password)
 
     # Create a cursor - DB will execute a statement, then keep the result stored in DB memory
     cur = conn.cursor()
