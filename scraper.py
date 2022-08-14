@@ -3,13 +3,14 @@
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 from discord import Webhook, RequestsWebhookAdapter
+import configparser
 
 
 def send_discord_message(new_bundle):
     webhook = Webhook.from_url(
         "https://discord.com/api/webhooks/1008066237609300080/"
         "xT7HplJknPuhiSALuKcttf2PTH7hbf8ZDLQ0vn86SGlKQutvT-vlzZHWrssR7w0kwAnB", adapter=RequestsWebhookAdapter())
-    webhook.send(content=new_bundle)
+    webhook.send(content=new_bundle, avatar_url="https://cdn.humblebundle.com/static/hashed/03de04a2224923e1ff35c11a3a1cd0e675b5003e.png")
 
 
 # Press the green button in the gutter to run the script.
@@ -20,13 +21,12 @@ if __name__ == '__main__':
     from selenium.webdriver.support import expected_conditions as EC
     import psycopg2
 
-    file = open(".idea/credentials.txt", "r")
-    credentials = file.read().splitlines()
-    file.close()
+    config = configparser.ConfigParser()
+    config.read('config.ini')
 
-    db = credentials[0]
-    user = credentials[1]
-    password = credentials[2]
+    db = config['Credentials']['database_name']
+    user = config['Credentials']['database_username']
+    password = config['Credentials']['database_pass']
 
     print('Connecting to the PostgreSQL database...')
     conn = psycopg2.connect(dbname=db, user=user, password=password)
@@ -61,7 +61,7 @@ if __name__ == '__main__':
             exists = cur.fetchone()[0]
 
             if exists == 0:
-                print("New bundle " + bundle_title + " found!")
+                print("New bundle " + bundle_title.lower() + " found!")
                 # Discord message
                 send_discord_message(bundle_link)
 
