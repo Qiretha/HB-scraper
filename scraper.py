@@ -20,11 +20,13 @@ if __name__ == '__main__':
     from selenium.webdriver.support import expected_conditions as EC
     import psycopg2
 
-    file = open("credentials.txt", "r")
+    file = open(".idea/credentials.txt", "r")
+    credentials = file.read().splitlines()
+    file.close()
 
-    db = file.readline()
-    user = file.readline()
-    password = file.readline()
+    db = credentials[0]
+    user = credentials[1]
+    password = credentials[2]
 
     print('Connecting to the PostgreSQL database...')
     conn = psycopg2.connect(dbname=db, user=user, password=password)
@@ -59,6 +61,7 @@ if __name__ == '__main__':
             exists = cur.fetchone()[0]
 
             if exists == 0:
+                print("New bundle " + bundle_title + " found!")
                 # Discord message
                 send_discord_message(bundle_link)
 
