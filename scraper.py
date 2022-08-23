@@ -13,33 +13,7 @@ def send_discord_message(new_bundle):
     webhook.send(content=new_bundle, avatar_url="https://cdn.humblebundle.com/static/hashed/03de04a2224923e1ff35c11a3a1cd0e675b5003e.png")
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    from selenium import webdriver
-    from selenium.webdriver.common.by import By
-    from selenium.webdriver.support.ui import WebDriverWait
-    from selenium.webdriver.support import expected_conditions as EC
-    import psycopg2
-
-    config = configparser.ConfigParser()
-    config.read('config.ini')
-
-    db = config['Credentials']['database_name']
-    user = config['Credentials']['database_username']
-    password = config['Credentials']['database_pass']
-
-    print('Connecting to the PostgreSQL database...')
-    conn = psycopg2.connect(dbname=db, user=user, password=password)
-
-    # Create a cursor - DB will execute a statement, then keep the result stored in DB memory
-    cur = conn.cursor()
-
-    print('PostgreSQL database version: ', end='')
-    cur.execute('SELECT version()')
-
-    db_version = cur.fetchone()
-    print(db_version)
-
+def search_humble():
     with webdriver.Firefox() as driver:
         driver.get("https://www.humblebundle.com/games")
         # Give the page a chance to fully load before searching
@@ -73,6 +47,37 @@ if __name__ == '__main__':
             else:
                 print(bundle_title + " already exists...")
             pos += 1
+
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    from selenium import webdriver
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+    import psycopg2
+
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+
+    db = config['Credentials']['database_name']
+    user = config['Credentials']['database_username']
+    password = config['Credentials']['database_pass']
+
+    print('Connecting to the PostgreSQL database...')
+    conn = psycopg2.connect(dbname=db, user=user, password=password)
+
+    # Create a cursor - DB will execute a statement, then keep the result stored in DB memory
+    cur = conn.cursor()
+
+    print('PostgreSQL database version: ', end='')
+    cur.execute('SELECT version()')
+
+    db_version = cur.fetchone()
+    print(db_version)
+
+    search_humble()
+
     try:
         cur.close()
         print('Database connection closed')
