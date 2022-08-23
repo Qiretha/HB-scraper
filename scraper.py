@@ -2,6 +2,11 @@
 
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import psycopg2
 from discord import Webhook, RequestsWebhookAdapter
 import configparser
 
@@ -51,12 +56,6 @@ def search_humble():
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    from selenium import webdriver
-    from selenium.webdriver.common.by import By
-    from selenium.webdriver.support.ui import WebDriverWait
-    from selenium.webdriver.support import expected_conditions as EC
-    import psycopg2
-
     config = configparser.ConfigParser()
     config.read('config.ini')
 
