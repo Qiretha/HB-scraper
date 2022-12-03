@@ -26,7 +26,7 @@ def get_game_tiers():
 
     # issue with title
     for game in games_collection:
-        game_name = game.text
+        game_name = "- " + game.text
         games_list.append(game_name)
 
     # If the bundle has multiple tiers
@@ -41,21 +41,10 @@ def get_game_tiers():
             tier_price_size[tier_price] = int(tier_size)
 
         games_list.reverse()
-        prev_tier_size = 0
-        first_tier = True
+
         for price_quote, size in reversed(tier_price_size.items()):
-            # price_quote = re.search(r'£\d+.\d+', price_quote).group()
-
-            # No change this back to just quoting what HB says so users are aware of average tiers
-            # if first_tier:
-            #     price_quote = "Pay at least " + price_quote + " to get " + str(size - prev_tier_size) + " items:"
-            #     first_tier = False
-            # else:
-            #     price_quote = "Pay at least " + price_quote + " to get " + str(size - prev_tier_size) + " more items:"
-
             # Create dictionary item containing the tier + price coupled with the no. of games and the game names
-            tiers_games_dict[price_quote] = games_list[prev_tier_size:size]
-            # prev_tier_size = size
+            tiers_games_dict[price_quote] = games_list[0:size]
     else:
         # If the bundle is a single tier
         single_tier_items = driver.find_element(By.XPATH, "//h3[contains(@class, 'tier-header')]").text
@@ -109,7 +98,6 @@ def search_humble():
         built_bundles[pos][1] = bundle.text.split("\n")[0]
         pos += 1
 
-    pos = 0
     for bundle in built_bundles:
         bundle_link = bundle[0]
         bundle_title = bundle[1]
@@ -129,8 +117,8 @@ def search_humble():
                         (bundle_title, bundle_link))
             conn.commit()
         else:
+            # If bundle has been seen before, print message and continue to next bundle
             print(bundle_title + " already found...")
-        pos += 1
 
 
 # Press the green button in the gutter to run the script.
