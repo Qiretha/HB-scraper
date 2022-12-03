@@ -24,7 +24,7 @@ def get_game_tiers():
     games_list = []
     tiers_games_dict = {}
 
-    # issue with title
+    # issue with title - not sure what this is, needs checking
     for game in games_collection:
         game_name = "- " + game.text
         games_list.append(game_name)
